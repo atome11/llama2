@@ -4,10 +4,11 @@ import sys
 
 model_id = 'Llama-2-13b-chat-hf'
 device = f'cuda:{cuda.current_device()}' #if cuda.is_available() else 'cpu'
-model=none
+model=None
 
 
 def initialize_model():
+    global model
     # set quantization configuration to load large model with less GPU memory
     # this requires the `bitsandbytes` library
     bnb_config = transformers.BitsAndBytesConfig(
@@ -27,19 +28,19 @@ def initialize_model():
     )
     model.eval()
     print(f"Model loaded on {device}")
-    return global model
 
-def tokenizer(hf_auth='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',model_id = 'meta-llama/Llama-2-13b-chat-hf'):
+def tokenizer(hf_auth,model_id):
     tokenizer = transformers.AutoTokenizer.from_pretrained(
         model_id,
         use_auth_token=hf_auth
     )
     return tokenizer
 
-def generate_text_pipeline(model):
+def generate_text_pipeline():
+    global model
     generate_text = transformers.pipeline(
         model=model,
-        tokenizer=tokenizer,
+        tokenizer=tokenizer('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','meta-llama/Llama-2-13b-chat-hf'),
         return_full_text=True,  # langchain expects the full text
         task='text-generation',
         # we pass model parameters here too
@@ -53,10 +54,8 @@ def generate_text_pipeline(model):
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         if sys.argv[1] == "initialize":
-            model = initialize_model()
-        elif sys.argv[1] == "tokenize":
-            model = tokenizer()
+            itialize_model()
         elif sys.argv[1] == "generate":
-            generate_text = generate_text_pipeline(model)
+            generate_text = generate_text_pipeline()
     else:
         print("Please specify an argument: 'initialize' or 'generate'")
