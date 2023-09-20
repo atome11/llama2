@@ -3,8 +3,9 @@ from langchain.document_loaders import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
+from langchain.document_loaders import TextLoader
 
-def main(data_path, faiss_save_path):
+def main(data_path):
     text_loader_kwargs = {'autodetect_encoding': True}
     loader = DirectoryLoader(data_path, glob="**/*.txt", loader_cls=TextLoader, loader_kwargs=text_loader_kwargs)
     docs = loader.load()
@@ -21,12 +22,11 @@ def main(data_path, faiss_save_path):
     vectorstore_0 = FAISS.from_documents(all_splits, embeddings)
 
     # Save the FAISS index
-    vectorstore_0.save(faiss_save_path)
+    vectorstore_0.storage_context.persist()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Load raw data and save FAISS index.")
     parser.add_argument("data_path", type=str, help="Path to access the raw data.")
-    parser.add_argument("faiss_save_path", type=str, help="Location to save the FAISS index.")
     
     args = parser.parse_args()
-    main(args.data_path, args.faiss_save_path)
+    main(args.data_path)
