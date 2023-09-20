@@ -8,7 +8,6 @@ model=None
 
 
 def initialize_model():
-    global model
     # set quantization configuration to load large model with less GPU memory
     # this requires the `bitsandbytes` library
     bnb_config = transformers.BitsAndBytesConfig(
@@ -28,6 +27,7 @@ def initialize_model():
     )
     model.eval()
     print(f"Model loaded on {device}")
+    return model
 
 def tokenizer(hf_auth,model_id):
     tokenizer = transformers.AutoTokenizer.from_pretrained(
@@ -37,7 +37,6 @@ def tokenizer(hf_auth,model_id):
     return tokenizer
 
 def generate_text_pipeline():
-    global model
     generate_text = transformers.pipeline(
         model=model,
         tokenizer=tokenizer('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','meta-llama/Llama-2-13b-chat-hf'),
