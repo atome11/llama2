@@ -2,8 +2,9 @@ from torch import cuda, bfloat16
 import transformers
 import sys
 
-model_id = 'meta-llama/Llama-13b-chat-hf'
+model_id = 'Llama-2-13b-chat-hf'
 device = f'cuda:{cuda.current_device()}' #if cuda.is_available() else 'cpu'
+model=none
 
 
 def initialize_model():
@@ -26,9 +27,9 @@ def initialize_model():
     )
     model.eval()
     print(f"Model loaded on {device}")
-    return model
+    return global model
 
-def tokenizer(hf_auth='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',model_id = 'meta-llama/Llama-2-13b-chat-hf')
+def tokenizer(hf_auth='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',model_id = 'meta-llama/Llama-2-13b-chat-hf'):
     tokenizer = transformers.AutoTokenizer.from_pretrained(
         model_id,
         use_auth_token=hf_auth
@@ -53,8 +54,9 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         if sys.argv[1] == "initialize":
             model = initialize_model()
+        elif sys.argv[1] == "tokenize":
+            model = tokenizer()
         elif sys.argv[1] == "generate":
-            model = initialize_model()
             generate_text = generate_text_pipeline(model)
     else:
         print("Please specify an argument: 'initialize' or 'generate'")
