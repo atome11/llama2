@@ -3,7 +3,8 @@ import transformers
 import sys
 
 model_id = 'meta-llama/Llama-13b-chat-hf'
-device = f'cuda:{cuda.current_device()}' if cuda.is_available() else 'cpu'
+device = f'cuda:{cuda.current_device()}' #if cuda.is_available() else 'cpu'
+
 
 def initialize_model():
     # set quantization configuration to load large model with less GPU memory
@@ -14,14 +15,7 @@ def initialize_model():
         bnb_4bit_use_double_quant=True,
         bnb_4bit_compute_dtype=bfloat16
     )
-
-    # begin initializing HF items, need auth token for these
-    hf_auth = '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'
-    model_config = transformers.AutoConfig.from_pretrained(
-        model_id,
-        use_auth_token=hf_auth
-    )
-
+    
     model = transformers.AutoModelForCausalLM.from_pretrained(
         model_id,
         trust_remote_code=True,
@@ -33,6 +27,13 @@ def initialize_model():
     model.eval()
     print(f"Model loaded on {device}")
     return model
+
+def tokenizer(hf_auth='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',model_id = 'meta-llama/Llama-2-13b-chat-hf')
+    tokenizer = transformers.AutoTokenizer.from_pretrained(
+        model_id,
+        use_auth_token=hf_auth
+    )
+    return tokenizer
 
 def generate_text_pipeline(model):
     generate_text = transformers.pipeline(
