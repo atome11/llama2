@@ -122,6 +122,7 @@ if st.session_state["authentication_status"]:
     # Launch model & pipeline
     llm = generate_text_pipeline(model)
     # Init chain
+    vector_store = load_local("~/vectorstore_0")
     chain = init_chain(llm)
     
     # Initialize session state    
