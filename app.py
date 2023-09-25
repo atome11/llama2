@@ -1,10 +1,17 @@
 import streamlit_authenticator as stauth
 import streamlit as st
 from streamlit_chat import message
-
+from torch import cuda, bfloat16
+import transformers
 import yaml
 from yaml.loader import SafeLoader
 
+
+# sélection du modèle 
+model_id = 'Llama-2-13b-chat-hf'
+device = f'cuda:{cuda.current_device()}' #if cuda.is_available() else 'cpu'
+
+# chargement du fichier d'identification
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
 authenticator = stauth.Authenticate(
@@ -14,6 +21,7 @@ authenticator = stauth.Authenticate(
     config['cookie']['expiry_days']
 )
 
+# initialisation de l'écran de login
 authenticator.login('Login', 'main')
 
 def conversation_chat(query):
