@@ -82,7 +82,7 @@ def init_chain(llm,vector_store)
 # Fonctions du chatbot
 # --------------------------------------------------------------------------------------------------------------------------------
 def conversation_chat(query):
-    result = {"answer":"oui ?"}
+    result = chain({"question": query, "chat_history": st.session_state['history']})
     st.session_state['history'].append((query, result["answer"]))
     return result["answer"]
 
@@ -123,7 +123,7 @@ if st.session_state["authentication_status"]:
     llm = generate_text_pipeline(model)
     # Init chain
     vector_store = load_local("~/vectorstore_0")
-    chain = init_chain(llm)
+    chain = init_chain(llm,vector_store)
     
     # Initialize session state    
     initialize_session_state()
