@@ -39,7 +39,7 @@ def tokenizer(hf_auth,model_id):
 def generate_text_pipeline():
     generate_text = transformers.pipeline(
         model=model,
-        tokenizer=tokenizer('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','meta-llama/Llama-2-13b-chat-hf'),
+        tokenizer=tokenizer('','meta-llama/Llama-2-13b-chat-hf'),
         return_full_text=True,  # langchain expects the full text
         task='text-generation',
         # we pass model parameters here too
