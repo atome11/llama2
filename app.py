@@ -68,8 +68,17 @@ def generate_text_pipeline(model):
         max_new_tokens=4096,  # max number of tokens to generate in the output
         repetition_penalty=1.1  # without this output begins repeating
     )
-    return generate_text
-
+    llm = HuggingFacePipeline(pipeline=generate_text)
+    return llm
+    
+def init_chain(llm,vector_store)
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+    
+    chain = ConversationalRetrievalChain.from_llm(llm=llm,chain_type='stuff',
+                                                  retriever=vector_store.as_retriever(search_kwargs={"k":2}),
+                                                  memory=memory)
+    return chain
+    
 # Fonctions du chatbot
 # --------------------------------------------------------------------------------------------------------------------------------
 def conversation_chat(query):
@@ -107,7 +116,15 @@ if st.session_state["authentication_status"]:
     authenticator.logout('Logout', 'main', key='unique_key')
     st.write(f'Welcome *{st.session_state["name"]}*')
     st.title("8A Worker")
-    # Initialize session state
+    
+    # Init model 
+    model = initialize_model(model_id)
+    # Launch model & pipeline
+    llm = generate_text_pipeline(model)
+    # Init chain
+    chain = init_chain(llm)
+    
+    # Initialize session state    
     initialize_session_state()
     # Display chat history
     display_chat_history()
