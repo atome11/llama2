@@ -9,7 +9,7 @@ from langchain.chains import ConversationalRetrievalChain
 
 
 # sélection du modèle 
-model_id = 'Llama-2-13b-chat-hf'
+model_id = 'Llama-2-70b-chat-hf'
 device = f'cuda:{cuda.current_device()}' #if cuda.is_available() else 'cpu'
 
 # chargement du fichier d'identification
