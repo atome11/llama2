@@ -117,21 +117,20 @@ def display_chat_history():
                 message(st.session_state["past"][i], is_user=True, key=str(i) + '_user')
                 message(st.session_state["generated"][i], key=str(i))
 
+# Init model 
+model = initialize_model(model_id)
+# Launch model & pipeline
+llm = generate_text_pipeline(model)
+# Init chain
+model_name = "sentence-transformers/all-MiniLM-L6-v2"
+embeddings = HuggingFaceEmbeddings(model_name=model_name)
+vector_store = FAISS.load_local("~/vector_db", embeddings)
+chain = init_chain(llm,vector_store)
 
 if st.session_state["authentication_status"]:
     authenticator.logout('Logout', 'main', key='unique_key')
     st.write(f'Welcome *{st.session_state["name"]}*')
     st.title("8A Worker")
-    
-    # Init model 
-    model = initialize_model(model_id)
-    # Launch model & pipeline
-    llm = generate_text_pipeline(model)
-    # Init chain
-    model_name = "sentence-transformers/all-MiniLM-L6-v2"
-    embeddings = HuggingFaceEmbeddings(model_name=model_name)
-    vector_store = FAISS.load_local("~/vector_db", embeddings)
-    chain = init_chain(llm,vector_store)
     
     # Initialize session state    
     initialize_session_state()
