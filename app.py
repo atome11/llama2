@@ -12,6 +12,7 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.llms import HuggingFacePipeline
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
+from langchain.memory import ConversationBufferMemory
 
 # sélection du modèle 
 model_id = 'Llama-2-13b-chat-hf'
