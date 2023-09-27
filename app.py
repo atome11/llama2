@@ -6,6 +6,7 @@ import transformers
 import yaml
 from yaml.loader import SafeLoader
 from langchain.chains import ConversationalRetrievalChain
+from langchain.llms import HuggingFacePipeline
 
 
 # sélection du modèle 
