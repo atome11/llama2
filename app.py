@@ -10,8 +10,8 @@ from yaml.loader import SafeLoader
 
 from langchain.chains import ConversationalRetrievalChain
 from langchain.llms import HuggingFacePipeline
+from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
-
 
 # sélection du modèle 
 model_id = 'Llama-2-13b-chat-hf'
@@ -83,7 +83,7 @@ def init_chain(llm,vector_store):
                                                   retriever=vector_store.as_retriever(search_kwargs={"k":2}),
                                                   memory=memory)
     return chain
-    
+
 # Fonctions du chatbot
 # --------------------------------------------------------------------------------------------------------------------------------
 def conversation_chat(query):
@@ -127,7 +127,9 @@ if st.session_state["authentication_status"]:
     # Launch model & pipeline
     llm = generate_text_pipeline(model)
     # Init chain
-    vector_store = FAISS.load_local("~/vector_db")
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+    embeddings = HuggingFaceEmbeddings(model_name=model_name)
+    vector_store = FAISS.load_local("~/vector_db", embeddings)
     chain = init_chain(llm,vector_store)
     
     # Initialize session state    
