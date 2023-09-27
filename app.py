@@ -9,7 +9,7 @@ from langchain.chains import ConversationalRetrievalChain
 
 
 # sélection du modèle 
-model_id = 'Llama-2-70b-chat-hf'
+model_id = 'Llama-2-13b-chat-hf'
 device = f'cuda:{cuda.current_device()}' #if cuda.is_available() else 'cpu'
 
 # chargement du fichier d'identification
@@ -71,7 +71,7 @@ def generate_text_pipeline(model):
     llm = HuggingFacePipeline(pipeline=generate_text)
     return llm
     
-def init_chain(llm,vector_store)
+def init_chain(llm,vector_store):
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     
     chain = ConversationalRetrievalChain.from_llm(llm=llm,chain_type='stuff',
