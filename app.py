@@ -1,12 +1,16 @@
 import streamlit_authenticator as stauth
 import streamlit as st
 from streamlit_chat import message
+
 from torch import cuda, bfloat16
 import transformers
+
 import yaml
 from yaml.loader import SafeLoader
+
 from langchain.chains import ConversationalRetrievalChain
 from langchain.llms import HuggingFacePipeline
+from langchain.vectorstores import FAISS
 
 
 # sélection du modèle 
@@ -123,7 +127,7 @@ if st.session_state["authentication_status"]:
     # Launch model & pipeline
     llm = generate_text_pipeline(model)
     # Init chain
-    vector_store = load_local("~/vectorstore_0")
+    vector_store = FAISS.load_local("~/vector_db")
     chain = init_chain(llm,vector_store)
     
     # Initialize session state    
