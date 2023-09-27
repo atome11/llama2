@@ -1,8 +1,9 @@
 pip install transformers accelerate einops langchain xformers bitsandbytes faiss-gpu sentence_transformers
 pip install streamlit streamlit_authenticator streamlit_chat 
 pip install yml
+pip install torch torchvision torchaudio
 
 sudo apt-get install git-lfs
 git lfs install
-git clone https://huggingface.co/meta-llama/Llama-2-70b-chat-hf
+git clone https://huggingface.co/meta-llama/Llama-2-13b-chat-hf
 
