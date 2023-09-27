@@ -28,9 +28,6 @@ authenticator = stauth.Authenticate(
     config['cookie']['expiry_days']
 )
 
-# initialisation de l'écran de login
-authenticator.login('Login', 'main')
-
 # Fonctions du modèle
 # --------------------------------------------------------------------------------------------------------------------------------
 def initialize_model(model_id):
@@ -125,7 +122,14 @@ llm = generate_text_pipeline(model)
 model_name = "sentence-transformers/all-MiniLM-L6-v2"
 embeddings = HuggingFaceEmbeddings(model_name=model_name)
 vector_store = FAISS.load_local("/home/ydhello/vector_db", embeddings)
-chain = init_chain(llm,vector_store)
+
+memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)    
+chain = ConversationalRetrievalChain.from_llm(llm,chain_type='stuff',
+                                                  retriever=vector_store.as_retriever(search_kwargs={"k":2}),
+                                                  memory=memory)
+
+# initialisation de l'écran de login
+authenticator.login('Login', 'main')
 
 if st.session_state["authentication_status"]:
     authenticator.logout('Logout', 'main', key='unique_key')
